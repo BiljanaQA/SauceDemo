@@ -6,6 +6,7 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.annotations.AfterClass;
@@ -60,7 +61,16 @@ public class BaseTest {
     @BeforeClass
     public void setUp() {
         WebDriverManager.chromedriver().setup();
-        driver = new ChromeDriver();
+
+        String driverPath = ConfigReader.get("chrome.driver.path");
+        String binaryPath = ConfigReader.get("chrome.binary.path");
+
+        System.setProperty("webdriver.chrome.driver", driverPath);
+        ChromeOptions options = new ChromeOptions();
+        options.addArguments("--incognito");
+        options.setBinary(binaryPath);
+
+        driver = new ChromeDriver(options);
         wait = new WebDriverWait(driver, Duration.ofSeconds(5));
         loginPage = new LoginPage();
         inventoryPage = new InventoryPage();
